@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learnify</title>
+    <link rel="stylesheet" href="script.css">
+</head>
+<body>
+    <div class="container">
+        <img src="https://img.freepik.com/free-photo/fun-cartoon-kid-with-rain-gear_183364-81176.jpg?t=st=1729912227~exp=1729915827~hmac=55e52b12c5c20036937308b558c7a694828feb010a735a5871823849e155d410&w=740" class="pm-image">
+        <h1>Welcome to Learnify!</h1>
+        
+        <div id="age-section" class="section">
+            <h2>What is your age?</h2>
+            <button onclick="selectAge('5-12')">5-12 yrs old</button>
+            <button onclick="selectAge('13-20')">13-20 years old</button>
+            <button onclick="selectAge('20+')">20+</button>
+        </div>
+        
+        <div id="grade-section" class="section hidden">
+            <h2>What is your grade?</h2>
+            <button onclick="selectGrade('1')">Grade 1</button>
+            <button onclick="selectGrade('2')">Grade 2</button>
+            <button onclick="selectGrade('3')">Grade 3</button>
+        </div>
+
+        <div id="chapters-section" class="section hidden">
+            <h2>Chapters for Grade 1</h2>
+            <button onclick="selectChapter('Introduction to ABC')">Introduction to ABC</button>
+        </div>
+
+        <div id="video-section" class="section hidden">
+            <h2>You are now watching: Introduction to ABC. Enjoy the learning!</h2>
+            <button onclick="takeTest()">Take Test</button>
+        </div>
+
+        <div id="test-section" class="section hidden">
+            <h2>Take the Test</h2>
+            <div id="questions-container"></div>
+            <button id="submit-button" onclick="submitTest()">Submit Test</button>
+            <h3 id="result" class="hidden"></h3>
+        </div>
+    </div>
+    <script src="script.js">const Groq = require('groq-sdk');
+
+        const groq = new Groq();
+        async function main() {
+        const chatCompletion = await groq.chat.completions.create({
+            "messages": [
+            {
+                "role": "system",
+                "content": "You are an AI that provides performance analysis based on test results."
+            },
+            {
+                "role": "user",
+                "content": ""
+            }
+            ],
+            "model": "llama3-8b-8192",
+            "temperature": 1,
+            "max_tokens": 1024,
+            "top_p": 1,
+            "stream": true,
+            "stop": null
+        });
+        
+        for await (const chunk of chatCompletion) {
+            process.stdout.write(chunk.choices[0]?.delta?.content || '');
+        }
+        }
+        
+        main();</script>
+</body>
+</html>
